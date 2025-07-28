@@ -1,0 +1,11 @@
+module tb_pipeline;
+    reg clk = 0;
+    pipeline_processor uut (.clk(clk));
+
+    always #5 clk = ~clk;
+
+    initial begin
+        $display("Starting pipeline simulation...");
+        #100 $finish;
+    end
+endmodule
