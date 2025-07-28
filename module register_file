@@ -1,0 +1,19 @@
+module register_file (
+    input clk,
+    input [3:0] rs, rt, rd,
+    input [7:0] write_data,
+    input reg_write,
+    output reg [7:0] rs_data, rt_data
+);
+    reg [7:0] regs [0:15];
+
+    always @(posedge clk) begin
+        if (reg_write)
+            regs[rd] <= write_data;
+    end
+
+    always @(*) begin
+        rs_data = regs[rs];
+        rt_data = regs[rt];
+    end
+endmodule
