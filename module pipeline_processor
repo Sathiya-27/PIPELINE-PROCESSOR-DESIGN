@@ -1,0 +1,32 @@
+module pipeline_processor (
+    input clk
+);
+    reg [3:0] pc = 0;
+    wire [15:0] instr;
+    wire [3:0] opcode = instr[15:12];
+    wire [3:0] rs = instr[11:8];
+    wire [3:0] rt = instr[7:4];
+    wire [3:0] rd_imm = instr[3:0];
+
+    wire [7:0] rs_data, rt_data, alu_result;
+
+    instr_mem im(.pc(pc), .instr(instr));
+
+    register_file rf(
+        .clk(clk),
+        .rs(rs), .rt(rt), .rd(rd_imm),
+        .write_data(alu_result),
+        .reg_write(1'b1),
+        .rs_data(rs_data), .rt_data(rt_data)
+    );
+
+    alu alu_unit(
+        .a(rs_data), .b(rt_data),
+        .op(opcode[1:0]),
+        .result(alu_result)
+    );
+
+    always @(posedge clk) begin
+        pc <= pc + 1;
+    end
+endmodule
